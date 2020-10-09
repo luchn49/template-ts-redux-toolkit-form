@@ -1,10 +1,20 @@
 import { Checkbox } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import IMuiFormItem from 'models/IMuiFormItem';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-const MuiCheckbox = (props: IMuiFormItem) => {
+interface IFormCheckboxItem {
+  name: string;
+  label: string;
+  errorobj?: {
+    message: string;
+    type: string;
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value?: any;
+}
+
+const MuiCheckbox = (props: IFormCheckboxItem) => {
   const { label } = props;
   return <FormControlLabel control={<Checkbox {...props} />} label={label} />;
 };

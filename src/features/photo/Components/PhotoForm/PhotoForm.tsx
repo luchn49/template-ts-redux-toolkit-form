@@ -3,17 +3,53 @@ import { Button, Grid } from '@material-ui/core';
 import FormSelect from 'components/FomSelect/FormSelect';
 import FormDatePicker from 'components/FormDatepicker/FormDatepicker';
 import FormInput from 'components/FormInput/FormInput';
+import FormAdvanceSelect from 'components/FormMutiSelect/FormAdvanceSelect';
 import FormRadio from 'components/FormRadio/FormRadio';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const validationSchema = yup.object().shape({
-  title: yup.string().required('Name is required'),
-  category: yup.string().required('Category is required'),
-  gender: yup.string(),
-  txtDate: yup.date().required('Date is required'),
+  // title: yup.string().required('Name is required'),
+  // category: yup.string().required('Category is required'),
+  // gender: yup.string(),
+  // txtDate: yup
+  //   .date()
+  //   .required('Mui Date field is required')
+  //   .typeError('Mui Date field must be a date')
+  //   .nullable(),
 });
+
+const suggestions = [
+  { value: '1', label: 'Technology' },
+  { value: '2', label: 'Education' },
+  { value: '3', label: 'Nature' },
+  { value: '4', label: 'Animals' },
+  { value: '5', label: 'Styles' },
+];
+
+const numberData = [
+  { value: '1', label: 'Technology' },
+  { value: '2', label: 'Education' },
+  { value: '3', label: 'Nature' },
+  { value: '4', label: 'Animals' },
+  { value: '5', label: 'Styles' },
+];
+
+const radioGroupOptions = [
+  {
+    value: '1',
+    label: 'Female',
+  },
+  {
+    value: '2',
+    label: 'Male',
+  },
+  {
+    value: '3',
+    label: 'Other',
+  },
+];
 
 const PhotoForm = (): JSX.Element => {
   const methods = useForm({
@@ -21,23 +57,10 @@ const PhotoForm = (): JSX.Element => {
   });
   const { handleSubmit, errors } = methods;
 
-  const onSubmit = () => {
-    // console.log(data);
+  const onSubmit = (data: never) => {
+    // eslint-disable-next-line no-console
+    console.log(data);
   };
-
-  const numberData = [
-    { id: '1', value: 'Technology' },
-    { id: '2', value: 'Education' },
-    { id: '3', value: 'Nature' },
-    { id: '4', value: 'Animals' },
-    { id: '5', value: 'Styles' },
-  ];
-
-  const radioGroupOptions = [
-    { id: 'female', value: 'Female' },
-    { id: 'male', value: 'Male' },
-    { id: 'other', value: 'Other' },
-  ];
 
   return (
     <div style={{ padding: '10px' }}>
@@ -62,7 +85,23 @@ const PhotoForm = (): JSX.Element => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormDatePicker name="txtDate" label="Date" required errorobj={errors.txtDate} />
+                <FormDatePicker
+                  typedatetime="DateTime"
+                  name="txtDate"
+                  label="Mui Date Validation"
+                  required
+                  errorobj={errors.txtDate}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormAdvanceSelect
+                  name="txtCountry"
+                  required
+                  isMulti
+                  placeholder="Search a country..."
+                  options={suggestions}
+                  errorobj={errors.txtCountry}
+                />
               </Grid>
               <Grid item xs={12}>
                 <FormRadio name="gender" label="Gender" options={radioGroupOptions} />

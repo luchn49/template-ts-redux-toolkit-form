@@ -1,57 +1,91 @@
-import DayUtils from "@date-io/dayjs";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import IMuiFormItem from "models/IMuiFormItem";
-import React, { useRef } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import React from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
+import DayjsUtils from '@date-io/dayjs';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+  KeyboardDateTimePicker,
+  KeyboardTimePicker,
+} from '@material-ui/pickers';
 
-const MuiDatePicker = (props: IMuiFormItem): JSX.Element => {
-  const { required, errorobj, value } = props;
-  const ref = useRef(value)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MuiDatePicker = (props: any): JSX.Element => {
+  const { required, errorobj, typedatetime } = props;
   let isError = false;
-  let errorMessage = "";
+  let errorMessage = '';
+
   if (errorobj) {
     isError = true;
     errorMessage = errorobj.message;
   }
+  const renderDateTimeInput = () => {
+    switch (typedatetime) {
+      case 'DateTime':
+        return (
+          <KeyboardDateTimePicker
+            {...props}
+            fullWidth
+            format="DD-MM-YYYY HH:mm"
+            InputLabelProps={{
+              className: required ? 'required-label' : '',
+              required: required || false,
+            }}
+            error={isError}
+            helperText={errorMessage}
+          />
+        );
+      case 'Date':
+        return (
+          <KeyboardDatePicker
+            {...props}
+            fullWidth
+            format="DD-MM-YYYY"
+            InputLabelProps={{
+              className: required ? 'required-label' : '',
+              required: required || false,
+            }}
+            error={isError}
+            helperText={errorMessage}
+          />
+        );
+      default:
+        return (
+          <KeyboardTimePicker
+            {...props}
+            fullWidth
+            format="HH:mm"
+            InputLabelProps={{
+              className: required ? 'required-label' : '',
+              required: required || false,
+            }}
+            error={isError}
+            helperText={errorMessage}
+          />
+        );
+    }
+  };
+  return <>{renderDateTimeInput()}</>;
+};
 
-  const handleOnChange = () => {
-
-  }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const FormDatePicker = (props: any): JSX.Element => {
+  const { control } = useFormContext();
+  const { name, label } = props;
   return (
     <>
-      <DatePicker
-        format="DD-MM-YYYY"
-        fullWidth={true}
-        InputLabelProps={{
-          className: required ? "required-label" : "",
-          required: required || false,
-        }}
-        error={isError}
-        helperText={errorMessage}
-        {...props}
-        value={value}
-        onChange={handleOnChange}
-        inputRef={ref}
-      />
+      <MuiPickersUtilsProvider utils={DayjsUtils}>
+        <Controller
+          {...props}
+          as={MuiDatePicker}
+          name={name}
+          control={control}
+          label={label}
+          defaultValue={null}
+        />
+      </MuiPickersUtilsProvider>
     </>
   );
 };
-
-const FormDatePicker = (props: IMuiFormItem): JSX.Element => {
-  const { control } = useFormContext();
-  return (
-    <React.Fragment>
-      <MuiPickersUtilsProvider utils={DayUtils}>
-        <Controller
-          as={MuiDatePicker}
-          control={control}
-          defaultValue={null}
-          {...props}
-        />
-      </MuiPickersUtilsProvider>
-    </React.Fragment>
-  );
-}
 
 export default FormDatePicker;

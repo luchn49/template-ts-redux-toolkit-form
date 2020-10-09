@@ -3,11 +3,25 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import IMuiFormItem from 'models/IMuiFormItem';
+import { IOptionType } from 'models/IOptionType';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-const MuiSelect = (props: IMuiFormItem) => {
+interface IFormSelectItem {
+  name: string;
+  label: string;
+  type?: string;
+  options?: IOptionType[] | undefined;
+  required?: boolean;
+  errorobj?: {
+    message: string;
+    type: string;
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value?: any;
+}
+
+const MuiSelect = (props: IFormSelectItem) => {
   const { label, name, options, required, errorobj } = props;
 
   let isError = false;
@@ -29,8 +43,8 @@ const MuiSelect = (props: IMuiFormItem) => {
         </MenuItem>
         {options &&
           options.map((item) => (
-            <MenuItem key={item.id} value={item.id}>
-              {item.value}
+            <MenuItem key={item.value} value={item.value}>
+              {item.label}
             </MenuItem>
           ))}
       </Select>
@@ -39,7 +53,7 @@ const MuiSelect = (props: IMuiFormItem) => {
   );
 };
 
-const FormSelect = (props: IMuiFormItem): JSX.Element => {
+const FormSelect = (props: IFormSelectItem): JSX.Element => {
   const { control } = useFormContext();
   return (
     <>

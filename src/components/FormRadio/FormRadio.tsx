@@ -3,11 +3,25 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import IMuiFormItem from 'models/IMuiFormItem';
+import { IOptionType } from 'models/IOptionType';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-const MuiRadio = (props: IMuiFormItem) => {
+interface IFormRadioItem {
+  name: string;
+  label: string;
+  type?: string;
+  options?: IOptionType[] | undefined;
+  required?: boolean;
+  errorobj?: {
+    message: string;
+    type: string;
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value?: any;
+}
+
+const MuiRadio = (props: IFormRadioItem) => {
   const { label, options } = props;
   return (
     <FormControl component="fieldset">
@@ -16,10 +30,10 @@ const MuiRadio = (props: IMuiFormItem) => {
         {options &&
           options.map((item) => (
             <FormControlLabel
-              key={item.id}
-              value={item.id}
+              key={item.value}
+              value={item.value}
               control={<Radio />}
-              label={item.value}
+              label={item.label}
             />
           ))}
       </RadioGroup>
@@ -27,7 +41,7 @@ const MuiRadio = (props: IMuiFormItem) => {
   );
 };
 
-const FormRadio = (props: IMuiFormItem): JSX.Element => {
+const FormRadio = (props: IFormRadioItem): JSX.Element => {
   const { control } = useFormContext();
   return (
     <>

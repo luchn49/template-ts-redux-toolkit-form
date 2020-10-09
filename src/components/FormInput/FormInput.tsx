@@ -1,9 +1,20 @@
 import { FormControl, TextField } from '@material-ui/core';
-import IMuiFormItem from 'models/IMuiFormItem';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-const MuiTextField = (props: IMuiFormItem): JSX.Element => {
+interface IFormInputProps {
+  name: string;
+  label: string;
+  type?: string;
+  required?: boolean;
+  errorobj?: {
+    message: string;
+    type: string;
+  };
+  value?: string;
+}
+
+const MuiTextField = (props: IFormInputProps): JSX.Element => {
   const { required, errorobj } = props;
 
   let isError = false;
@@ -16,9 +27,9 @@ const MuiTextField = (props: IMuiFormItem): JSX.Element => {
   return (
     <FormControl fullWidth>
       <TextField
-        fullWidth={true}
+        fullWidth
         InputLabelProps={{
-          className: required ? "required-label" : "",
+          className: required ? 'required-label' : '',
           required: required || false,
         }}
         error={isError}
@@ -26,10 +37,10 @@ const MuiTextField = (props: IMuiFormItem): JSX.Element => {
         {...props}
       />
     </FormControl>
-  )
+  );
 };
 
-const FormInput = (props: IMuiFormItem): JSX.Element => {
+const FormInput = (props: IFormInputProps): JSX.Element => {
   const { control } = useFormContext();
   return (
     <>
