@@ -9,7 +9,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 interface IFormRadioItem {
   name: string;
-  label: string;
+  label?: string;
   type?: string;
   options?: IOptionType[] | undefined;
   required?: boolean;
@@ -17,16 +17,36 @@ interface IFormRadioItem {
     message: string;
     type: string;
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value?: any;
+  disabled?: boolean;
 }
 
-const MuiRadio = (props: IFormRadioItem) => {
+// function MuiRadio(props: IFormRadioItem) {
+//   const { label, options } = props;
+//   return (
+//     <FormControl component="fieldset">
+//       <FormLabel component="legend">{label}</FormLabel>
+//       <RadioGroup row {...props}>
+//         {options &&
+//           options.map((item) => (
+//             <FormControlLabel
+//               key={item.value}
+//               value={item.value}
+//               control={<Radio />}
+//               label={item.label}
+//             />
+//           ))}
+//       </RadioGroup>
+//     </FormControl>
+//   );
+// }
+
+const MuiRadio = React.forwardRef((props: IFormRadioItem, ref: any) => {
   const { label, options } = props;
   return (
     <FormControl component="fieldset">
-      <FormLabel component="legend">{label}</FormLabel>
-      <RadioGroup row {...props}>
+      {label && <FormLabel component="legend">{label}</FormLabel>}
+      <RadioGroup row {...props} ref={ref}>
         {options &&
           options.map((item) => (
             <FormControlLabel
@@ -39,15 +59,15 @@ const MuiRadio = (props: IFormRadioItem) => {
       </RadioGroup>
     </FormControl>
   );
-};
+});
 
-const FormRadio = (props: IFormRadioItem): JSX.Element => {
+function FormRadio(props: IFormRadioItem) {
   const { control } = useFormContext();
   return (
     <>
       <Controller as={MuiRadio} control={control} defaultValue="" {...props} />
     </>
   );
-};
+}
 
 export default FormRadio;
